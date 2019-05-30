@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ImageResults from './ImageResults';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -22,14 +23,23 @@ export class Search extends Component {
     changeText = (e) => {
         this.setState({
             [e.target.name]: e.target.value
-        })
+        }, () => {
+            axios.get(`${this.state.apiUrl}/?key=${this.state.apiKey}&q=${this.state.searchText}&image_type=photo&per_page=${this.state.amount}&safesearch=true`) // &safesearch: so that only appropriate images for all ages will be shown
+                .then(
+                    res => this.setState({images: res.data.hits})
+                )
+                .catch(err => console.log(err));
+        });
     }
 
-    changeAmount = (e) => {
-       
+    changeAmount = (e, index, value) => {
+       this.setState({
+           amount: value
+       })
     }
     
     render() {
+        // console.log(this.state.images);
         return (
             <div>
                 <TextField 
@@ -53,6 +63,10 @@ export class Search extends Component {
                     <MenuItem value={30} primaryText="30" />
                     <MenuItem value={50} primaryText="50" />
                 </SelectField>
+                <br />
+
+                {/* Conditional Rendering: To only render component if there is an image in the array */}
+                {this.state.images.length > 0 ? <ImageResults image={this.state.images} /> : null }
             </div>
         )
     }
