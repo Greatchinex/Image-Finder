@@ -22,9 +22,11 @@ class Search extends Component {
     // OnChange Events
     changeText = (e) => {
         const val = e.target.value
+
         this.setState({
             [e.target.name]: val
         }, () => {
+            // Check if input field is empty
             if(val === "") {
                 this.setState({
                     images: []
@@ -41,19 +43,19 @@ class Search extends Component {
 
     changeAmount = (e, index, value) => {
        this.setState({
-           amount: value
+            amount: value
        })
     }
     
     render() {
-        // console.log(this.state.images);
+        console.log(this.state.images);
         return (
             <div>
                 <TextField 
                     name="searchText" 
                     value={this.state.searchText} 
                     onChange={this.changeText}
-                    floatingLabelText="Serch Images"
+                    floatingLabelText="Search Images"
                     fullWidth={true}  
                 />
 
